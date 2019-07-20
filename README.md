@@ -6,6 +6,9 @@ can be found here:
 
 https://www.atariarchives.org/basicgames/showpage.php?page=106
 
+I wrote this in honor of the 50th Anniversary of the Apollo 11 lunar
+landing, and as a fun short project.
+
 I have taken some liberties with the text output of the program but have
 tried to keep the same feel, and the calculations should be very similar.
 
