@@ -14,7 +14,7 @@ to put something on the Moon with it though.
 
 
 
-##Some known issues with this code:
+## Some known issues with this code:
 
 - It's not very Pythonic
 
@@ -42,7 +42,7 @@ due to different implementations of floating point numbers
 was written
 
 
-##Other notes:
+## Other notes:
 
 - The logic of the original took some thinking through... this would be a
 classic example for 'GOTOs considered harmful'
