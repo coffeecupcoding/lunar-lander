@@ -149,7 +149,7 @@ def out_of_fuel(lem):
     Print message and set final velocity and time
     """
     global elapsed_time
-    print("FUEL OUT AT %.2d SECONDS" % elapsed_time)
+    print("\nFUEL OUT AT %d SECONDS" % elapsed_time)
     seconds_to_impact = ((((-1) * lem.velocity) +
         math.sqrt(((lem.velocity ** 2) +
             (2 * lem.altitude * gravity)))) / gravity)
@@ -159,47 +159,51 @@ def out_of_fuel(lem):
 
 def end_game(lem):
     velocity_mph = lem.velocity * 3600.0
-    print("ON MOON AT %.2d SECONDS - IMPACT VELOCITY %.2d MPH" % 
+    print("\nON THE MOON AT %d SECONDS\nIMPACT VELOCITY %d MPH\n" % 
         (elapsed_time, velocity_mph))
     if velocity_mph < 1.2:
         print("PERFECT LANDING!!")
     elif velocity_mph <= 10.0:
         print("GOOD LANDING (COULD RE BETTER)")
     elif velocity_mph <= 60.0:
-        print("CRAFT DAMAGE... YOU'RE STRANDED HERE UNTIL A RESCUE")
-        print("PARTY ARRIVES. HOPE YOU HAVE ENOUGH OXYGEN!")
+        print("CRAFT DAMAGE... YOU'RE STRANDED HERE")
+        print("UNTIL A RESCUE PARTY ARRIVES.")
+        print("I HOPE YOU HAVE ENOUGH OXYGEN!")
     else:
         print("THAT'S ONE SMALL IMPACT FOR THE MOON,")
         print("ONE GIANT BOOM FOR YOUR LANDER!")
-        print("YOU BLASTED A NEW CRATER %.2d FEET DEEP!" %
+        print("YOU BLASTED A NEW CRATER %d FEET DEEP!" %
             (velocity_mph * 0.227))
     raise GameOver
 
 def intro():
     print("\n"
         "              LUNAR\n"
-        "CREATIVE COMPUTING MORRISTOWN, NEW JERSEY\n\n"
-        "THIS IS A COMPUTER SIMULATION OF AN APOLLO LUNAR\n"
-        "LANDING CAPSULE.\n\n"
-        "THE ON-BOARD COMPUTER HAS FAILED (IT WAS MADE BY\n"
-        "XEROX) SO YOU HAVE TO LAND THE CAPSULE MANUALLY.\n\n"
+        "CREATIVE COMPUTING MORRISTOWN, NJ\n\n"
+        "THIS IS A COMPUTER SIMULATION OF AN\n"
+        "APOLLO LUNAR LANDING CAPSULE.\n\n"
+        "THE ON-BOARD COMPUTER HAS FAILED (IT WAS\n"
+        "MADE BY XEROX) SO YOU HAVE TO LAND THE\n"
+        "CAPSULE MANUALLY.\n\n"
     )
 
 def output_header():
-    print(" SEC\t MILES\tFEET\t  MPH\tLB FUEL\tBURN RATE")
+    print(" SEC  MILES  FEET    MPH   FUEL  RATE")
 
 def output_status(lem):
     miles = int(lem.altitude)
     feet = 5280 * (lem.altitude - miles)
     mph = 3600 * lem.velocity
-    print("%4.2d\t%6i\t%4i\t%5.2d\t%4.2d" %
-        (elapsed_time, miles, feet, mph, lem.fuel), end='\t')
+    print("%4d    %3d  %4d  %5d  %5d" %
+        (elapsed_time, miles, feet, mph, lem.fuel), end='  ')
 
 def run_game():
-    print("SET THE BURN RATE OF THE RETRO ROCKETS TO ANY VALUE\n"
-        "BETWEEN 0 (FREE FALL) AND 200 (MAXIMUM BURN) IN POUNDS\n"
-        "PER SECOND.  SET A NEW BURN RATE EVERY 10 SECONDS.\n\n"
-        "CAPSULE DRY WEIGHT IS 16,000 LBS; INITIAL FUEL IS 16,500 LBS.\n\n\n"
+    print("SET THE BURN RATE OF THE RETRO ROCKETS\n"
+        "TO ANY VALUE BETWEEN 0 (FREE FALL) AND\n"
+        "200 (MAXIMUM BURN) IN POUNDS PER SECOND.\n"
+        "SET A NEW BURN RATE EVERY 10 SECONDS.\n\n"
+        "CAPSULE DRY WEIGHT IS 16,500 LBS;\n"
+        "INITIAL FUEL IS 16,000 LBS.\n\n\n"
         "GOOD LUCK!\n\n"
     )
     global elapsed_time
@@ -238,7 +242,7 @@ def run():
         try:
             run_game()
         except GameOver:
-            reply = input("TRY AGAIN?? ")
+            reply = input("\nTRY AGAIN?? ")
             if not (reply.startswith(('y', 'Y'))):
                 another_game = False
 
