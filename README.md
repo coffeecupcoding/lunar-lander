@@ -24,8 +24,7 @@ to put something on the Moon with it though.
 - There are no options to set initial parameters, and the intro text uses
 static values
 
-- The overall design is not particularly consistent internally (it's
-essentially version 1.2, and work on it stopped when replay worked)
+- The overall design is not particularly consistent internally
 
 - The calculations in the program are copied from the original; I don't
 fully understand some parts and may also have mis-read some of the BASIC
@@ -45,7 +44,7 @@ due to different implementations of floating point numbers
 was written
 
 
-## Other notes:
+## Notes on the BASIC code:
 
 - The logic of the original took some thinking through... this would be a
 classic example for 'GOTOs considered harmful'

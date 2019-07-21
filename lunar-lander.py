@@ -5,7 +5,6 @@ A version of the old lunar lander game
 Rewritten from 101 BASIC Computer Games by David Ahl
 """
 
-import os
 import math
 
 # Globals
@@ -80,13 +79,6 @@ class lander:
                    (self.fuel_isp * burn_time * self.altitude_mass_factor(q)))
         return altitude
 
-    def calc_burn_time(self, burn_rate, time_left):
-        # Reduce burn time if there isn't enough fuel
-        burn_time = time_left
-        if self.fuel < burn_rate * burn_time:
-            burn_time = self.fuel / burn_rate
-        return burn_time
-        
     def calc_dynamics(self, burn_rate, burn_time):
         """
         Return new altitude and velocity based on burn rate and time
@@ -96,6 +88,13 @@ class lander:
         velocity = self.calc_velocity(burn_rate, burn_time, q)
         altitude = self.calc_altitude(burn_rate, burn_time, q)
         return (altitude, velocity)
+
+    def calc_burn_time(self, burn_rate, time_left):
+        # Reduce burn time if there isn't enough fuel
+        burn_time = time_left
+        if self.fuel < burn_rate * burn_time:
+            burn_time = self.fuel / burn_rate
+        return burn_time
 
     def calc_upward_burn_time(self, burn_rate):
         """
@@ -127,7 +126,7 @@ class lander:
         """
         Determine 'landing' parameters
         """
-        while iter_time > 0.001:
+        while iter_time >= 0.005:
             iter_velocity = (self.velocity +
                 math.sqrt((self.velocity ** 2) +
                 (2 * self.altitude * ((gravity) - 
