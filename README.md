@@ -35,7 +35,7 @@ due to different implementations of floating point numbers
 
 - There's no input checking currently
 
-- The output could be improved, particularly to fit on 40 column screens
+- ~~The output could be improved, particularly to fit on 40 column screens~~
 
 - There are no unit tests (NASA would not sign off on this code)
 
@@ -50,8 +50,8 @@ was written
 - The logic of the original took some thinking through... this would be a
 classic example for 'GOTOs considered harmful'
 
-- The variable W appears to be used for two different purposes.
+- The variable W appears to be used for two different purposes
 
 - I don't think line 400 does anything: V was just set to J so the IF in
-line 390 takes precedence.  I'm not sure what it was intended to do, either.
+line 390 takes precedence.  I'm not sure what it was intended to do, either
 
