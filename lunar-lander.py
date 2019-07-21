@@ -18,7 +18,7 @@ class lander:
     Lander data and status
     """
     def __init__(self, initial_altitude=120.0, initial_velocity=1.0,
-            capsule_mass=16500.0, initial_fuel=16000.0,
+            capsule_mass=16500.0, initial_fuel=16500.0,
             fuel_specific_impulse = 1.8):
          self.altitude = initial_altitude
          self.velocity = initial_velocity
@@ -202,7 +202,7 @@ def run_game():
         "200 (MAXIMUM BURN) IN POUNDS PER SECOND.\n"
         "SET A NEW BURN RATE EVERY 10 SECONDS.\n\n"
         "CAPSULE DRY WEIGHT IS 16,500 LBS;\n"
-        "INITIAL FUEL IS 16,000 LBS.\n\n\n"
+        "INITIAL FUEL IS 16,500 LBS.\n\n\n"
         "GOOD LUCK!\n\n"
     )
     global elapsed_time
