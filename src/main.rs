@@ -66,8 +66,8 @@ impl Lander {
         }
     }
     fn calc_upward_burn_time(&self, burn_rate: f64) -> f64 {
-        let factor: f64 = 1.0 - ((self.total_mass * GRAVITY) /
-            ((self.fuel_isp * burn_rate) / 2.0));
+        let factor: f64 = (1.0 - ((self.total_mass * GRAVITY) /
+            (self.fuel_isp * burn_rate))) / 2.0;
         (((self.total_mass * self.phys.velocity) /
         (self.fuel_isp * burn_rate * (factor + f64::sqrt(
         (factor * factor) + (self.phys.velocity / self.fuel_isp))))) + 0.05)
@@ -155,6 +155,41 @@ fn output_status(lem: &Lander) {
     io::stdout().flush().unwrap();
 }
 
+fn prompt_for_input(prompt: &str) -> Result<String, io::Error> {
+    let mut response = String::new();
+    print!("{}", prompt);
+    io::stdout().flush().unwrap();
+    io::stdin().read_line(&mut response)?;
+    Ok(response)
+}
+
+fn get_burn_rate() -> f64 {
+    let mut burn_rate: f64;
+    loop {
+        let rate_input = match prompt_for_input(&"") {
+            Ok(rate) => rate,
+            Err(_) => {
+                print!("PLEASE ENTER A BURN RATE: ");
+                continue
+            },
+        };
+        burn_rate = match rate_input.trim().parse() {
+            Ok(rate) => rate,
+            Err(_) => {
+                print!("PLEASE ENTER A BURN RATE: ");
+                continue
+            },
+        };
+        if burn_rate < 0.0 || burn_rate > 200.0 {
+            println!("PLEASE ENTER A BURN RATE");
+            print!("BETWEEN 0 AND 200: ");
+            continue
+        }
+        break
+    }
+    burn_rate
+}
+
 fn run_game() {
     println!("\
         SET THE BURN RATE OF THE RETRO ROCKETS\n\
@@ -185,11 +220,7 @@ fn run_game() {
     output_header();
     'game: loop {
         output_status(&lem);
-        let mut burn_rate = String::new();
-        io::stdin().read_line(&mut burn_rate)
-            .expect("PLEASE INPUT A BURN RATE");
-        let burn_rate: f64 = burn_rate.trim().parse()
-            .expect("PLEASE INPUT A NUMBER");
+        let burn_rate = get_burn_rate();
         let mut this_period: f64 = 10.0;
         loop {
             if lem.out_of_fuel() {
@@ -226,13 +257,16 @@ fn main() {
     intro();
     loop {
         run_game();
-        print!("\nTRY AGAIN?? ");
-        io::stdout().flush().unwrap();
-        let mut response = String::new();
-        io::stdin().read_line(&mut response).unwrap();
-        if !(response.starts_with('Y') | response.starts_with('y')) {
-            break
-        }
+        match prompt_for_input(&"\nTRY AGAIN?? ") {
+            Ok(response) => {
+                if !(response.starts_with('Y') | response.starts_with('y')) {
+                    break
+                }
+            },
+            Err(_) => {
+                break
+            },
+        };
     }
 }
 
