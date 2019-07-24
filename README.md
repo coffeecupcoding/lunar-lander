@@ -32,12 +32,14 @@ fully understand some parts and may also have mis-read some of the BASIC
 - Even where the formulas are correct, there may be differences in calculation
 due to different implementations of floating point numbers
 
-- There is definitely a bug in the end of game calculations where the final
+- ~~There is definitely a bug in the end of game calculations where the final
 numbers and result can end up being nonsense.  I think this happens when the
 final velocity is slightly negative when time remaining gets below the
-threshold, but I haven't dug into it beyond finding a repeatable test case
+threshold, but I haven't dug into it beyond finding a repeatable test case~~
+Found and fixed the bug, it was (as I expected) in calc_upward_burn_time(),
+I mis-copied the 'factor' formula
 
-- There's no input checking currently
+- ~~There's no input checking currently~~  Added input validation
 
 - There are no unit tests (NASA would not sign off on this code)
 

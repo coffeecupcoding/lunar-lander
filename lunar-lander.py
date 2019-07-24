@@ -6,6 +6,7 @@ Rewritten from 101 BASIC Computer Games by David Ahl
 """
 
 import math
+import sys
 
 # Globals
 elapsed_time = 0
@@ -101,12 +102,12 @@ class lander:
         This is the most obscure part of the original program
         """
         factor = (1 -
-            ((self.total_mass * gravity) / ((self.fuel_isp * burn_rate) / 2)))
+            (self.total_mass * gravity) / (self.fuel_isp * burn_rate)) / 2
         # the units work at least...
         # the '+ 0.05' at the end is for ?? good luck?
-        new_burn_time = (((self.total_mass * self.velocity) /
+        new_burn_time = ((self.total_mass * self.velocity) /
             (self.fuel_isp * burn_rate * (factor + math.sqrt(
-            (factor * factor) + (self.velocity / self.fuel_isp))))) + 0.05)
+            (factor * factor) + (self.velocity / self.fuel_isp))))) + 0.05
         return new_burn_time
 
     def update_status(self, burn_rate, burn_time, altitude, velocity, time):
@@ -149,9 +150,9 @@ def out_of_fuel(lem):
     """
     global elapsed_time
     print("\nFUEL OUT AT %d SECONDS" % elapsed_time)
-    seconds_to_impact = ((((-1) * lem.velocity) +
-        math.sqrt(((lem.velocity ** 2) +
-            (2 * lem.altitude * gravity)))) / gravity)
+    seconds_to_impact = (((-1.0) * lem.velocity) +
+        math.sqrt((lem.velocity * lem.velocity) +
+            (2.0 * lem.altitude * gravity))) / gravity
     lem.velocity = lem.velocity + (gravity * seconds_to_impact)
     elapsed_time = elapsed_time + seconds_to_impact
     end_game(lem)
@@ -196,6 +197,24 @@ def output_status(lem):
     print("%4d    %3d  %4d  %5d  %5d" %
         (elapsed_time, miles, feet, mph, lem.fuel), end='  ')
 
+def get_burn_rate():
+    user_input = ""
+    while not user_input:
+        user_input = input()
+        if user_input == "":
+            print("PLEASE ENTER A BURN RATE:", end=' ')
+        else:
+            try:
+                burn_rate = float(user_input)
+                if (burn_rate < 0.0) or (burn_rate > 200.0):
+                    print("PLEASE ENTER A BURN RATE")
+                    print("BETWEEN 0 AND 200 :", end=' ')
+                    user_input = ""
+            except ValueError:
+                print("PLEASE ENTER A BURN RATE:", end=' ')
+                user_input = ""
+    return burn_rate
+
 def run_game():
     print("SET THE BURN RATE OF THE RETRO ROCKETS\n"
         "TO ANY VALUE BETWEEN 0 (FREE FALL) AND\n"
@@ -213,7 +232,7 @@ def run_game():
     while True:
         burn_rate = 0.0
         output_status(lem)
-        burn_rate = float(input())
+        burn_rate = get_burn_rate()
         this_period = 10.0
         while True:
             if lem.out_of_fuel():
@@ -244,6 +263,9 @@ def run():
             reply = input("\nTRY AGAIN?? ")
             if not (reply.startswith(('y', 'Y'))):
                 another_game = False
+        except KeyboardInterrupt:
+            print("\nEXITING GAME")
+            sys.exit(0)
 
 
 
