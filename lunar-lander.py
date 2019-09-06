@@ -173,7 +173,7 @@ def end_game(lem):
     if velocity_mph < 1.2:
         print("PERFECT LANDING!!")
     elif velocity_mph <= 10.0:
-        print("GOOD LANDING (COULD RE BETTER)")
+        print("GOOD LANDING (COULD BE BETTER)")
     elif velocity_mph <= 60.0:
         print("CRAFT DAMAGE... YOU'RE STRANDED HERE")
         print("UNTIL A RESCUE PARTY ARRIVES.")
