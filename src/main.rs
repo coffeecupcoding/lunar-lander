@@ -117,7 +117,7 @@ fn end_game(lem: &Lander) {
     if velocity_mph < 1.2 {
         println!("PERFECT LANDING!!");
     } else if velocity_mph <= 10.0 {
-        println!("GOOD LANDING (COULD RE BETTER)");
+        println!("GOOD LANDING (COULD BE BETTER)");
     } else if velocity_mph <= 60.0 {
         println!("CRAFT DAMAGE... YOU'RE STRANDED HERE\n\
             UNTIL A RESCUE PARTY ARRIVES.\n\
