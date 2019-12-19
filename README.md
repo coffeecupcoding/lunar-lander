@@ -26,11 +26,8 @@ static values
 
 - The overall design is not particularly consistent internally
 
-- The calculations in the program are copied from the original; I don't
-fully understand some parts and may also have mis-read some of the BASIC
-
-- Even where the formulas are correct, there may be differences in calculation
-due to different implementations of floating point numbers
+- There may be differences in calculation due to different implementations
+of floating point numbers
 
 - ~~There is definitely a bug in the end of game calculations where the final
 numbers and result can end up being nonsense.  I think this happens when the
