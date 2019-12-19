@@ -110,6 +110,7 @@ class Lander:
 
     def calc_upward_burn_time(self, burn_rate):
         """
+        Handle the case where the burn takes the velocity negative
         This is the most obscure part of the original program
         """
         factor = (1 -
