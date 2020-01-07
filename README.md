@@ -2,7 +2,7 @@
 Rewrite of the classic lunar lander game in Rust
 
 This is based on on the Python version I created
-(see coffeecupcoding/lunar-lander).  I wanted to write something small
+(see https://github.com/coffeecupcoding/lunar-lander-python).  I wanted to write something small
 in Rust, and that project was fresh in my mind.
 
 ## Known issues
