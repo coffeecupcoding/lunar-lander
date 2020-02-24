@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"lander"
 	"math"
@@ -9,6 +10,14 @@ import (
 	"strconv"
 	"strings"
 )
+
+func parseArgs(lem *lander.Lander) {
+	flag.Float64Var(&lem.Fuel, "fuel", 16500.0, "Initial fuel in pounds")
+	flag.Float64Var(&lem.CapsuleMass, "mass", 16500.0, "Capsule mass in pounds")
+	flag.Float64Var(&lem.Altitude, "altitude", 120.0, "Initial Capsule altitude in miles")
+	flag.Float64Var(&lem.Velocity, "velocity", 1.0, "Initial Capsule velocity in miles/sec")
+	flag.Parse()
+}
 
 func landing(lem *lander.Lander, burnRate float64, burnTime float64) {
 	lem.CalcImpact(burnRate, burnTime)
@@ -100,15 +109,15 @@ func getBurnRate(in *bufio.Reader) float64 {
 	return burnRate
 }
 
-func printStartMessage() {
+func printStartMessage(lem *lander.Lander) {
 	fmt.Println("")
 	fmt.Println("SET THE BURN RATE OF THE RETRO ROCKETS")
 	fmt.Println("TO ANY VALUE BETWEEN 0 (FREE FALL) AND")
 	fmt.Println("200 (MAXIMUM BURN) IN POUNDS PER SECOND.")
 	fmt.Println("SET A NEW BURN RATE EVERY 10 SECONDS.")
 	fmt.Println("")
-	fmt.Println("CAPSULE DRY WEIGHT IS 16,500 LBS;")
-	fmt.Println("INITIAL FUEL IS 16,500 LBS.")
+	fmt.Printf("CAPSULE DRY WEIGHT IS %0.0f LBS;\n", lem.CapsuleMass)
+	fmt.Printf("INITIAL FUEL IS %0.0f LBS.\n", lem.Fuel)
 	fmt.Println("")
 	fmt.Println("")
 	fmt.Println("GOOD LUCK!")
@@ -117,22 +126,14 @@ func printStartMessage() {
 
 func runGame(inputSource *bufio.Reader) {
 
-	// These should be options, passed to this function as a struct...
-	var lem = lander.Lander{
-		CapsuleMass: 16500.0,
-		Fuel:        16500.0,
-		Kinematics: lander.Kinematics{
-			Altitude:    120.0,
-			Velocity:    1.0,
-			ElapsedTime: 0.0,
-		},
-	}
-	lem.TotalMass = lem.CapsuleMass + lem.Fuel
-
 	var thisPeriod, burnRate, burnTime float64
+	var lem lander.Lander
 	var newK lander.Kinematics
 
-	printStartMessage()
+	parseArgs(&lem)
+	lem.TotalMass = lem.CapsuleMass + lem.Fuel
+
+	printStartMessage(&lem)
 	printHeader()
 
 game:
