@@ -1,3 +1,4 @@
+// Lunar implements a lunar landing simulation game
 package main
 
 import (
@@ -11,6 +12,8 @@ import (
 	"strings"
 )
 
+// parseArgs reads command line parameters (if any) and sets the initial
+// values for the Lander
 func parseArgs(lem *lander.Lander) {
 	flag.Float64Var(&lem.Fuel, "fuel", 16500.0, "Initial fuel in pounds")
 	flag.Float64Var(&lem.CapsuleMass, "mass", 16500.0, "Capsule mass in pounds")
@@ -19,20 +22,24 @@ func parseArgs(lem *lander.Lander) {
 	flag.Parse()
 }
 
+// landing refines the 'touchdown' parameters (moment of impact, velocity)
+// and prints the results
 func landing(lem *lander.Lander, burnRate float64, burnTime float64) {
 	lem.CalcImpact(burnRate, burnTime)
-	endGame(lem)
 }
 
+// outOfFuel calculates the results of freefall after the fuel has run out
+// and notifies the player
 func outOfFuel(lem *lander.Lander) {
 	fmt.Printf("\nFUEL OUT AT %0.2f SECONDS\n", lem.ElapsedTime)
 	secondsToImpact := ((-1.0 * lem.Velocity) + math.Sqrt(
 		math.Pow(lem.Velocity, 2.0)+(2.0*lem.Altitude*
 			lander.Gravity))) / lander.Gravity
 	lem.Velocity = lem.Velocity + (lander.Gravity * secondsToImpact)
-	endGame(lem)
 }
 
+// endGame prints the results of touchdown on the surface
+// It does not itself end the game...
 func endGame(lem *lander.Lander) {
 	velocityMph := lem.Velocity * 3600.0
 	fmt.Printf("\nON THE MOON AT %0.2f SECONDS\nIMPACT VELOCITY %0.2f MPH\n",
@@ -53,6 +60,8 @@ func endGame(lem *lander.Lander) {
 	}
 }
 
+// intro prints an introduction to the game
+// The message closely follows the original BASIC version
 func intro() {
 	fmt.Println("")
 	fmt.Println("              LUNAR")
@@ -67,10 +76,12 @@ func intro() {
 	fmt.Println("")
 }
 
+// printHeader prints the column headers for the game
 func printHeader() {
 	fmt.Println(" SEC  MILES  FEET    MPH    FUEL ")
 }
 
+// printStatus prints the lander status data in the columns
 func printStatus(lem *lander.Lander) {
 	miles, fracFeet := math.Modf(lem.Altitude)
 	feet := int(5280.0 * fracFeet)
@@ -79,6 +90,8 @@ func printStatus(lem *lander.Lander) {
 		lem.ElapsedTime, miles, feet, mph, lem.Fuel)
 }
 
+// getInput prints a prompt and requests input from the user
+// It does not check the input other than that it was received
 func getInput(in *bufio.Reader, prompt string) string {
 	fmt.Print(prompt)
 	input, err := in.ReadString('\n')
@@ -89,6 +102,7 @@ func getInput(in *bufio.Reader, prompt string) string {
 	return input
 }
 
+// getBurnRate requests a fuel burn rate from the user for the period
 func getBurnRate(in *bufio.Reader) float64 {
 	var burnRate float64
 	for {
@@ -109,6 +123,8 @@ func getBurnRate(in *bufio.Reader) float64 {
 	return burnRate
 }
 
+// printStartMessage gives basic instructions and prints (some of) the initial
+// parameters for the lander
 func printStartMessage(lem *lander.Lander) {
 	fmt.Println("")
 	fmt.Println("SET THE BURN RATE OF THE RETRO ROCKETS")
@@ -124,13 +140,12 @@ func printStartMessage(lem *lander.Lander) {
 	fmt.Println("")
 }
 
-func runGame(inputSource *bufio.Reader) {
+// runGame initializes and runs an instance of the game
+func runGame(lem lander.Lander, inputSource *bufio.Reader) {
 
 	var thisPeriod, burnRate, burnTime float64
-	var lem lander.Lander
 	var newK lander.Kinematics
 
-	parseArgs(&lem)
 	lem.TotalMass = lem.CapsuleMass + lem.Fuel
 
 	printStartMessage(&lem)
@@ -144,6 +159,7 @@ game:
 		for {
 			if lem.OutOfFuel() {
 				outOfFuel(&lem)
+				endGame(&lem)
 				break game
 			}
 			if thisPeriod < 0.001 {
@@ -153,7 +169,7 @@ game:
 			newK = lem.CalcDynamics(burnRate, burnTime)
 			if newK.Altitude <= 0.0 {
 				landing(&lem, burnRate, burnTime)
-				// landing() does not itself end the game
+				endGame(&lem)
 				break game
 			}
 			if lem.Velocity > 0.0 {
@@ -172,14 +188,18 @@ game:
 	}
 }
 
+// main runs the game loop
 func main() {
 
+	var lem lander.Lander
 	var response string
 	fromStdin := bufio.NewReader(os.Stdin)
 
+	parseArgs(&lem)
+
 	intro()
 	for {
-		runGame(fromStdin)
+		runGame(lem, fromStdin)
 		response = getInput(fromStdin, "\nTRY AGAIN?? ")
 		response = strings.ToLower(strings.TrimSpace(response))
 		if !strings.HasPrefix(response, "y") {
